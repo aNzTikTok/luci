@@ -163,7 +163,7 @@ o.validate = port_validate
 ---- UDP No Redir Ports
 local UDP_NO_REDIR_PORTS = m:get("@global_forwarding[0]", "udp_no_redir_ports")
 o = s:option(Value, "udp_no_redir_ports", translate("UDP No Redir Ports"),
-	"<font color='red'>" ..
+	"<font color='red'>" .. 
 		translate("Fill in the ports you don't want to be forwarded by the agent, with the highest priority.") ..
 	"</font>")
 o:value("", translate("Use global config") .. "(" .. UDP_NO_REDIR_PORTS .. ")")
@@ -250,7 +250,7 @@ o.validate = port_validate
 o:depends({ use_global_config = true })
 o:depends({ _udp_node_bool = "1" })
 
-o = s:option(DummyValue, "tips", " ")
+o = s:option(DummyValue, "tips", "　")
 o.rawhtml = true
 o.cfgvalue = function(t, n)
 	return string.format('<font color="red">%s</font>',

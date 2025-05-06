@@ -8,6 +8,9 @@ if not singbox_bin then
 	return
 end
 
+local local_version = api.get_app_version("sing-box")
+local version_ge_1_12_0 = api.compare_versions(local_version:match("[^v]+"), ">=", "1.12.0")
+
 local singbox_tags = luci.sys.exec(singbox_bin .. " version  | grep 'Tags:' | awk '{print $2}'")
 
 local appname = "passwall"
@@ -55,6 +58,9 @@ if singbox_tags:find("with_quic") then
 end
 if singbox_tags:find("with_quic") then
 	o:value("hysteria2", "Hysteria2")
+end
+if version_ge_1_12_0 then
+	o:value("anytls", "AnyTLS")
 end
 o:value("_urltest", translate("URLTest"))
 o:value("_shunt", translate("Shunt"))
@@ -135,7 +141,7 @@ o.default = "1800"
 o = s:option(Flag, _n("urltest_interrupt_exist_connections"), translate("Interrupt existing connections"))
 o:depends({ [_n("protocol")] = "_urltest" })
 o.default = "0"
-o.description = translate("Interrupt existing connections when the selected outbound has changed.")
+o.description = translate("Interrupt existing connections when the selected outbound has changed.") 
 
 -- [[ 分流模块 ]]
 if #nodes_table > 0 then
@@ -187,7 +193,7 @@ m.uci:foreach(appname, "shunt_rules", function(e)
 	end
 end)
 
-o = s:option(DummyValue, _n("shunt_tips"), " ")
+o = s:option(DummyValue, _n("shunt_tips"), "　")
 o.not_rewrite = true
 o.rawhtml = true
 o.cfgvalue = function(t, n)
@@ -248,6 +254,7 @@ o:depends({ [_n("protocol")] = "shadowsocks" })
 o:depends({ [_n("protocol")] = "shadowsocksr" })
 o:depends({ [_n("protocol")] = "trojan" })
 o:depends({ [_n("protocol")] = "tuic" })
+o:depends({ [_n("protocol")] = "anytls" })
 
 o = s:option(ListValue, _n("security"), translate("Encrypt Method"))
 for a, t in ipairs(security_list) do o:value(t) end
@@ -428,6 +435,7 @@ o:depends({ [_n("protocol")] = "vless" })
 o:depends({ [_n("protocol")] = "http" })
 o:depends({ [_n("protocol")] = "trojan" })
 o:depends({ [_n("protocol")] = "shadowsocks" })
+o:depends({ [_n("protocol")] = "anytls" })
 
 o = s:option(ListValue, _n("alpn"), translate("alpn"))
 o.default = "default"
@@ -439,6 +447,14 @@ o:value("http/1.1")
 o:value("h2,http/1.1")
 o:value("h3,h2,http/1.1")
 o:depends({ [_n("tls")] = true })
+
+o = s:option(Flag, _n("tls_disable_sni"), translate("Disable SNI"), translate("Do not send server name in ClientHello."))
+o.default = "0"
+o:depends({ [_n("tls")] = true })
+o:depends({ [_n("protocol")] = "hysteria"})
+o:depends({ [_n("protocol")] = "tuic" })
+o:depends({ [_n("protocol")] = "hysteria2" })
+o:depends({ [_n("protocol")] = "shadowsocks" })
 
 o = s:option(Value, _n("tls_serverName"), translate("Domain"))
 o:depends({ [_n("tls")] = true })
@@ -471,8 +487,8 @@ if singbox_tags:find("with_ech") then
 	o.validate = function(self, value)
 		value = value:gsub("^%s+", ""):gsub("%s+$","\n"):gsub("\r\n","\n"):gsub("[ \t]*\n[ \t]*", "\n")
 		value = value:gsub("^%s*\n", "")
-		if value:sub(-1) == "\n" then
-			value = value:sub(1, -2)
+		if value:sub(-1) == "\n" then  
+			value = value:sub(1, -2)  
 		end
 		return value
 	end
@@ -513,10 +529,11 @@ if singbox_tags:find("with_utls") then
 	o:depends({ [_n("protocol")] = "shadowsocks", [_n("utls")] = true })
 	o:depends({ [_n("protocol")] = "socks", [_n("utls")] = true })
 	o:depends({ [_n("protocol")] = "trojan", [_n("utls")] = true })
-
+	o:depends({ [_n("protocol")] = "anytls", [_n("utls")] = true })
+	
 	o = s:option(Value, _n("reality_publicKey"), translate("Public Key"))
 	o:depends({ [_n("utls")] = true, [_n("reality")] = true })
-
+	
 	o = s:option(Value, _n("reality_shortId"), translate("Short Id"))
 	o:depends({ [_n("utls")] = true, [_n("reality")] = true })
 end
@@ -731,6 +748,7 @@ o:depends({ [_n("protocol")] = "hysteria" })
 o:depends({ [_n("protocol")] = "vless" })
 o:depends({ [_n("protocol")] = "tuic" })
 o:depends({ [_n("protocol")] = "hysteria2" })
+o:depends({ [_n("protocol")] = "anytls" })
 
 o = s:option(ListValue, _n("chain_proxy"), translate("Chain Proxy"))
 o:value("", translate("Close(Not use)"))

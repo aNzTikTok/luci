@@ -41,7 +41,7 @@ if api.is_finded("ipt2socks") then
 	o.datatype = "port"
 
 	o = s:option(Value, _n("username"), translate("Username"))
-
+	
 	o = s:option(Value, _n("password"), translate("Password"))
 	o.password = true
 
