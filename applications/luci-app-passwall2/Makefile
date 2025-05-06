@@ -34,6 +34,12 @@ LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
 	+unzip \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_IPv6_Nat:ip6tables-mod-nat
 
+define Package/$(PKG_NAME)/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/passwall2 $(1)/etc/init.d/passwall2
+	$(CHMOD) +x $(1)/etc/init.d/passwall2
+endef
+
 define Package/$(PKG_NAME)/config
 menu "Configuration"
 
