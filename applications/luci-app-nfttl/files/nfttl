@@ -1,0 +1,8 @@
+------------------------------------------------------
+-- Copyright (C) 2025 DOTYCAT support@dotycat.com   --
+-- This file is licensed under the MIT License.     --
+------------------------------------------------------
+
+config nfttl
+    option mode '64'         
+    option custom_value '64'
