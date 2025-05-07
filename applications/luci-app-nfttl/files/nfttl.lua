@@ -1,7 +1,5 @@
-------------------------------------------------------
--- Copyright (C) 2025 DOTYCAT support@dotycat.com   --
--- This file is licensed under the MIT License.     --
-------------------------------------------------------
+-- Copyright (C) 2025 DOTYCAT support@dotycat.com   
+-- This file is licensed under the MIT License.     
 
 module("luci.controller.nfttl", package.seeall)
 
