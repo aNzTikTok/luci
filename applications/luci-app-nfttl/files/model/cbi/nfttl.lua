@@ -1,12 +1,9 @@
-------------------------------------------------------
--- Copyright (C) 2025 DOTYCAT support@dotycat.com   --
--- This file is licensed under the MIT License.     --
-------------------------------------------------------
+-- Copyright (C) 2025 DOTYCAT support@dotycat.com  
+-- This file is licensed under the MIT License.
+
 local uci = require "luci.model.uci".cursor()
 local nixio = require "nixio"
 local sys = require "luci.sys"
-
-local nft_file = "/etc/nftables.d/10-custom-filter-chains.nft"
 
 m = Map("nfttl", "TTL Control", "Set or disable TTL packet rewriting.")
 
@@ -30,6 +27,16 @@ reboot_button.inputstyle = "apply"  -- Make the button look like a "Save" button
 reboot_button.write = function()
     -- Trigger system reboot via Lua
     sys.reboot()
+
+    -- Disable the reboot button and show a confirmation message
+    local js = [[
+    <script type="text/javascript">
+    // Disable the button to prevent multiple clicks
+    document.getElementById("reboot_button").disabled = true;
+    alert("Reboot has been triggered. The router will restart shortly.");
+    </script>
+    ]]
+    m.message = js
 end
 
 -- Handle the form submission to update TTL settings
