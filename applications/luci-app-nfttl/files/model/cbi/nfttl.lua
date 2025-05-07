@@ -28,15 +28,8 @@ reboot_button.write = function()
     -- Trigger system reboot via Lua
     sys.reboot()
 
-    -- Disable the reboot button and show a confirmation message
-    local js = [[
-    <script type="text/javascript">
-    // Disable the button to prevent multiple clicks
-    document.getElementById("reboot_button").disabled = true;
-    alert("Reboot has been triggered. The router will restart shortly.");
-    </script>
-    ]]
-    m.message = js
+    -- Show a confirmation message directly in the view
+    m.message = "Reboot has been triggered. The router will restart shortly."
 end
 
 -- Handle the form submission to update TTL settings
