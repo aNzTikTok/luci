@@ -21,7 +21,7 @@ define Package/luci-app-nfttl
   CATEGORY:=LuCI
   DEPENDS:=+luci-base +nftables
   TITLE:=TTL Control
-  URL:=https://github.com/iFHax/luci-app-nfttl
+  URL:=https://github.com/aNzTikTok/luci-app-nfttl
 endef
 
 define Package/luci-app-nfttl/description
