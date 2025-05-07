@@ -1,6 +1,3 @@
--- Copyright (C) 2025 DOTYCAT support@dotycat.com  
--- This file is licensed under the MIT License.
-
 local uci = require "luci.model.uci".cursor()
 local nixio = require "nixio"
 local sys = require "luci.sys"
