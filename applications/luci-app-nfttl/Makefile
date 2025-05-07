@@ -1,38 +1,48 @@
+#
+# (с) 2025 DOTYCAT (https://github.com/dotycat/luci-app-nfttl)
+#
+
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=TTL Control
-LUCI_PKGARCH:=all
 PKG_NAME:=luci-app-nfttl
-PKG_VERSION:=1.0
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
-
-PKG_MAINTAINER:=Dotycat support@dotycat.com
-PKG_LICENSE:=MIT
+PKG_MAINTAINER:=DOTYCAT <https://github.com/dotycat/luci-app-nfttl>
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/luci-app-nfttl
+define Package/$(PKG_NAME)
   SECTION:=luci
   CATEGORY:=LuCI
-  DEPENDS:=+luci-base +nftables
-  TITLE:=TTL Control
-  URL:=https://github.com/aNzTikTok/luci-app-nfttl
+  TITLE:=TTL Control - Set or disable TTL packet rewriting
+  URL:=https://github.com/dotycat/luci-app-nfttl
+  PKGARCH:=all
+  DEPENDS:=+nftables +luci-base
 endef
 
-define Package/luci-app-nfttl/description
-  A LuCI app for managing TTL settings via nftables on OpenWrt.
+define Package/$(PKG_NAME)/description
+  A LuCI application to configure TTL (Time to Live) packet rewriting rules.
+endef
+
+define Package/$(PKG_NAME)/conffiles
+  /etc/config/nfttl
+endef
+
+define Build/Configure
 endef
 
 define Build/Compile
 endef
 
-define Package/luci-app-nfttl/install
-  $(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/nfttl
-  $(INSTALL_DATA) ./files/model/cbi/nfttl.lua $(1)/usr/lib/lua/luci/model/cbi/nfttl.lua
-  $(INSTALL_DIR) $(1)/etc/config
-  $(INSTALL_DATA) ./files/nfttl $(1)/etc/config/nfttl
-  $(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
-  $(INSTALL_DATA) ./files/nfttl.lua $(1)/usr/lib/lua/luci/controller/nfttl.lua
+define Package/$(PKG_NAME)/install
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/nfttl
+	$(INSTALL_DATA) ./files/model/cbi/nfttl.lua $(1)/usr/lib/lua/luci/model/cbi/nfttl.lua
+
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
+	$(INSTALL_DATA) ./files/nfttl.lua $(1)/usr/lib/lua/luci/controller/nfttl.lua
+
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/nfttl $(1)/etc/config/nfttl
 endef
 
-$(eval $(call BuildPackage,luci-app-nfttl))
+$(eval $(call BuildPackage,$(PKG_NAME)))
