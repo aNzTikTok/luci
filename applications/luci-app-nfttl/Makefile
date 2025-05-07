@@ -1,7 +1,5 @@
-# ------------------------------------------------------
-# -- Copyright (C) 2025 DOTYCAT support@dotycat.com   --
-# -- This file is licensed under the MIT License.     --
-# ------------------------------------------------------
+# Copyright (C) 2025 DOTYCAT support@dotycat.com 
+# This file is licensed under the MIT License.    
 
 include $(TOPDIR)/rules.mk
 
