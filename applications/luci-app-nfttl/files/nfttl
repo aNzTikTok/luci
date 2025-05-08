@@ -1,3 +1,0 @@
-config nfttl
-    option mode '64'         
-    option custom_value '64'
